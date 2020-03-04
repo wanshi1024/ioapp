@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>图片上传</title>
+    <link rel="icon" href="favicon.ico">
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+    <style>
+        .form-group {
+            text-align: center;
+            margin-top: 10%;
+        }
+    </style>
+</head>
+
+<body>
+
+    <body>
+        <div class="form-group">
+            <label>File input:</label>
+            <input type="file" name="file" id="file">
+            <p id="result"></p>
+            <img id="img" src="" style="max-width: 500px;">
+            <button id="upload" class="btn btn-default">提交</button>
+            <p>
+                当前为<span id="qhtip">不加水印上传</span>
+                <button id="qh">切换为加水印上传</button>
+            </p>
+        </div>
+
+
+        <script>
+            var uploadURL = 'upload';
+            $('#qh').click(function (e) {
+                if (uploadURL == 'upload') {
+                    uploadURL = 'imgUploadAddSY';
+                    $('#qhtip').html("当前为加水印上传");
+                    $(this).html('切换为不加水印上传');
+                } else {
+                    uploadURL = 'upload';
+                    $('#qhtip').html("当前为不加水印上传");
+                    $(this).html('切换为加水印上传');
+                }
+            });
+
+            function uploadFile() {
+                var file = document.getElementById("file")
+                //因为准备用post提交，又因为图片的内容比较大，所以我们选择使用formdata来承载数据
+                var formData = new FormData();
+                formData.append('file', file.files[0]);
+                $.ajax({
+                    url: `http://10.10.100.171:3000/${uploadURL}`,
+                    type: 'POST',
+                    data: formData,
+                    contentType: false, //为了让浏览器根据传入的formdata来判断contentType
+                    processData: false, //同上
+                    success: function (res) {
+                        console.log(res);
+                        if (200 === res.code) {
+                            $('#result').html(`上传成功！ 图片访问地址:
+                                <a href="${res.imgURL}" target="_blank"> ${res.imgURL}</a>`);
+                            $('#img').attr('src', res.imgURL);
+                        } else {
+                            $('#result').html("上传失败！");
+                        }
+                    },
+                    error: function () {
+                        $("#result").html("与服务器通信发生错误");
+                    }
+                });
+            }
+
+            function postPage() {
+                var uploada = document.getElementById('upload');
+                uploada.addEventListener("click", function () {
+                    uploadFile();
+                }, false);
+            }
+            window.onload = function () {
+                postPage();
+            }
+        </script>
+
+    </body>
+
+</html>
