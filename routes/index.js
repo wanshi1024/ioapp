@@ -1,14 +1,6 @@
 var express = require('express');
 var router = express.Router();
 
-/* GET home page. */
-router.get('/', function (req, res, next) {
-  res.render('index', {
-    title: 'Express'
-  });
-});
-
-
 var multer = require('multer');
 var getIPAdress = require('../util/getIPAdress')
 var waterMark = require('../util/waterMark')
@@ -32,7 +24,7 @@ var upload = multer({
 router.post('/upload', upload.single('file'), function (req, res, next) {
   var url = req.file.filename;
   res.send({
-    imgURL: `http://${getIPAdress()}:3000/images/${url}`,
+    imgURL: `http://${getIPAdress()}/images/${url}`,
     code: 200
   })
 })
@@ -44,7 +36,7 @@ router.post('/imgUploadAddSY', upload.single('file'), function (req, res, next) 
   var url = req.file.filename;
   waterMark(`public/images/${url}`);
   res.json({
-    imgURL: `http://${getIPAdress()}:3000/images/${url}`,
+    imgURL: `http://${getIPAdress()}/images/${url}`,
     code: 200
   })
 

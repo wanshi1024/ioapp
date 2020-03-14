@@ -4,7 +4,6 @@
 <head>
     <meta charset="utf-8">
     <title>图片上传</title>
-    <link rel="icon" href="favicon.ico">
     <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
     <style>
         .form-group {
@@ -49,8 +48,9 @@
                 //因为准备用post提交，又因为图片的内容比较大，所以我们选择使用formdata来承载数据
                 var formData = new FormData();
                 formData.append('file', file.files[0]);
+                // 123.56.23.25
                 $.ajax({
-                    url: `http://10.10.100.171:3000/${uploadURL}`,
+                    url: `http://123.56.23.25:1111/${uploadURL}`,
                     type: 'POST',
                     data: formData,
                     contentType: false, //为了让浏览器根据传入的formdata来判断contentType
